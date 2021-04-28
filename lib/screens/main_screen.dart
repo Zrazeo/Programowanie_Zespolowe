@@ -28,10 +28,9 @@ class _MainScreenState extends State<MainScreen> {
               CircleAvatar(
                 minRadius: 40,
                 backgroundColor: Colors.transparent,
-                child: Image.asset(
-                  'assets/avatar.png',
-                  width: 65,
-                  height: 65,
+                child: Icon(
+                  Icons.account_circle,
+                  size: 90,
                 ),
               ),
               Padding(

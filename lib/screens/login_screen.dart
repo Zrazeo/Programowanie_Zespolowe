@@ -48,7 +48,10 @@ class _LoginScreenState extends State<LoginScreen> {
                         onTap: () {
                           print('dziala');
                         },
-                        child: Image.asset('assets/avatar.png'),
+                        child: Icon(
+                          Icons.account_circle,
+                          size: 100,
+                        ),
                       ),
                     ),
               SizedBox(
