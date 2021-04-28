@@ -21,12 +21,16 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var mediaQuery = MediaQuery.of(context).size;
     return Scaffold(
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          // mainAxisAlignment: MainAxisAlignment.center,
           children: [
             // Text("Nazwa portalu"),
+            SizedBox(
+              height: mediaQuery.height * 0.2,
+            ),
             Image.asset(
               'assets/logo.png',
             ),
@@ -55,7 +59,15 @@ class _LoginScreenState extends State<LoginScreen> {
                       builder: (BuildContext context) => MainScreen())),
               icon: Icon(Icons.double_arrow_sharp),
               label: Text("Zaloguj"),
-            )
+            ),
+            SizedBox(
+              height: mediaQuery.height * 0.1,
+            ),
+            FlatButton.icon(
+              onPressed: () {},
+              icon: Icon(Icons.double_arrow_sharp),
+              label: Text("Nie masz konta? Zarejestruj sie"),
+            ),
           ],
         ),
       ),
