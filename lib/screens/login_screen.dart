@@ -27,6 +27,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     var mediaQuery = MediaQuery.of(context).size;
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Center(
         child: KeyboardVisibilityBuilder(builder: (context, isKeyboardVisible) {
           return Column(
