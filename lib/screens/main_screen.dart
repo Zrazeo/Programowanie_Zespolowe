@@ -12,18 +12,23 @@ class _MainScreenState extends State<MainScreen> {
     return Scaffold(
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            Text("Glowny ekran"),
-            RaisedButton(
-                child: Text("Powrot"),
-                onPressed: () => Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (BuildContext context) => LoginScreen())))
+            TextField(
+              decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  hintText: 'Udostepnij cos na forum'),
+            ),
+            Text("Tu kiedys beda posty"),
           ],
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.logout),
+          onPressed: () => Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (BuildContext context) => LoginScreen()))),
     );
   }
 }

@@ -26,17 +26,26 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text("Nazwa portalu"),
-            TextField(
-              controller: login,
-              decoration: InputDecoration(
-                hintText: "Podaj login",
+            // Text("Nazwa portalu"),
+            Image.asset(
+              'assets/logo.png',
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextField(
+                controller: login,
+                decoration: InputDecoration(
+                  hintText: "Podaj login",
+                ),
               ),
             ),
-            TextField(
-              controller: haslo,
-              decoration: InputDecoration(
-                hintText: "Podaj haslo",
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextField(
+                controller: haslo,
+                decoration: InputDecoration(
+                  hintText: "Podaj haslo",
+                ),
               ),
             ),
             FlatButton.icon(
