@@ -1,3 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import "package:flutter/material.dart";
 import './main_screen.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
@@ -10,18 +12,11 @@ class LoginScreen extends StatefulWidget {
   _LoginScreenState createState() => _LoginScreenState();
 }
 
-TextEditingController login;
-TextEditingController haslo;
-TextEditingController email;
-
 class _LoginScreenState extends State<LoginScreen> {
-  @override
-  void initState() {
-    super.initState();
-    login = TextEditingController();
-    haslo = TextEditingController();
-    email = TextEditingController();
-  }
+  String _login;
+  String _haslo;
+  String _email;
+  final auth = FirebaseAuth.instance;
 
   bool czyLog = true;
   @override
@@ -66,37 +61,62 @@ class _LoginScreenState extends State<LoginScreen> {
                   : Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: TextField(
-                        controller: login,
                         decoration: InputDecoration(
                           hintText: "Podaj nazwe użytkownika",
                         ),
+                        onChanged: (value) {
+                          setState(() {
+                            _login = value.trim();
+                          });
+                        },
                       ),
                     ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: TextField(
-                  controller: email,
+                  keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
                     hintText: "Podaj e-mail",
                   ),
+                  onChanged: (value) {
+                    setState(() {
+                      _email = value.trim();
+                    });
+                  },
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: TextField(
-                  controller: haslo,
+                  obscureText: true,
                   decoration: InputDecoration(
                     hintText: "Podaj haslo",
                   ),
+                  onChanged: (value) {
+                    setState(() {
+                      _haslo = value.trim();
+                    });
+                  },
                 ),
               ),
               Padding(
                 padding: EdgeInsets.only(top: mediaQuery.height * 0.015),
                 child: FlatButton.icon(
-                  onPressed: () => Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (BuildContext context) => MainScreen())),
+                  onPressed: () async {
+                    try {
+                      czyLog
+                          ? await auth.signInWithEmailAndPassword(
+                              email: _email, password: _haslo)
+                          : await auth.createUserWithEmailAndPassword(
+                              email: _email, password: _haslo);
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (BuildContext context) => MainScreen()));
+                    } on FirebaseAuthException catch (e) {
+                      print(e.code);
+                    }
+                  },
                   icon: Icon(Icons.double_arrow_sharp),
                   label: Text(
                     czyLog ? "Zaloguj" : "Załóż konto",

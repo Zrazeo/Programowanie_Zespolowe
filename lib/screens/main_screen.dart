@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import './login_screen.dart';
 import './profile_screen.dart';
@@ -13,6 +14,7 @@ class _MainScreenState extends State<MainScreen> {
   bool darkmode = false;
   @override
   Widget build(BuildContext context) {
+    final auth = FirebaseAuth.instance;
     Size mediaQuery = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
@@ -71,6 +73,7 @@ class _MainScreenState extends State<MainScreen> {
               ),
               GestureDetector(
                 onTap: () {
+                  auth.signOut();
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
