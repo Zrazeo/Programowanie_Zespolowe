@@ -30,13 +30,14 @@ class _MainScreenState extends State<MainScreen> {
             children: [
               SizedBox(height: mediaQuery.height * 0.05),
               CircleAvatar(
-                  minRadius: 40,
-                  backgroundColor: Colors.transparent,
-                  child: Image.network(
-                    auth.currentUser.photoURL,
-                    height: 90,
-                    width: 90,
-                  )),
+                minRadius: 70,
+                backgroundColor: Colors.transparent,
+                backgroundImage: NetworkImage(auth.currentUser.photoURL),
+                // child: Image.network(
+                //   auth.currentUser.photoURL,
+                //   height: 90,
+                //   width: 90,
+              ),
               Padding(
                 padding: EdgeInsets.only(top: 15),
                 child: Center(
@@ -47,7 +48,7 @@ class _MainScreenState extends State<MainScreen> {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.only(top: 80),
+                padding: EdgeInsets.only(top: 60),
                 child: ListTile(
                   leading: Icon(Icons.message),
                   title: Text(

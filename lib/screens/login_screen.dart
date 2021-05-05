@@ -8,6 +8,7 @@ import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:image_picker/image_picker.dart';
+import '../widgets/badge.dart';
 
 class LoginScreen extends StatefulWidget {
   LoginScreen({Key key}) : super(key: key);
@@ -50,10 +51,10 @@ class _LoginScreenState extends State<LoginScreen> {
     Future<void> _uploadFile() async {
       try {
         await firebase_storage.FirebaseStorage.instance
-            .ref('avatar/$_login.png')
+            .ref('avatar/$_email.png')
             .putFile(_image);
         downloadURL = await firebase_storage.FirebaseStorage.instance
-            .ref('avatar/$_login.png')
+            .ref('avatar/$_email.png')
             .getDownloadURL();
         // print('jedynka'+downloadURL);
       } on firebase_core.FirebaseException catch (e) {
@@ -90,11 +91,17 @@ class _LoginScreenState extends State<LoginScreen> {
                           getImage();
                         },
                         child: _image == null
-                            ? Icon(
-                                Icons.account_circle,
-                                size: 100,
+                            ? Badge(
+                                color: Colors.red,
+                                child: Icon(
+                                  Icons.account_circle,
+                                  size: 100,
+                                ),
                               )
-                            : Image.file(_image),
+                            : CircleAvatar(
+                                radius: 50,
+                                backgroundImage: FileImage(_image),
+                              ),
                       ),
                     ),
               SizedBox(
@@ -166,7 +173,16 @@ class _LoginScreenState extends State<LoginScreen> {
                           MaterialPageRoute(
                               builder: (BuildContext context) => MainScreen()));
                     } on FirebaseAuthException catch (e) {
-                      print(e.code);
+                      if (e.code == 'user-not-found' ||
+                          e.code == 'wrong-password') {
+                        if (MediaQuery.of(context).viewInsets.bottom != 0.0) {
+                          FocusScope.of(context).unfocus();
+                        }
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: const Text('Nieprawidlowe dane'),
+                          duration: Duration(seconds: 3),
+                        ));
+                      }
                     }
                   },
                   icon: Icon(Icons.double_arrow_sharp),
