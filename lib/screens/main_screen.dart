@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import './login_screen.dart';
-import './profile_screen.dart';
 
 import 'package:ionicons/ionicons.dart';
 
@@ -12,6 +11,9 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   bool darkmode = false;
+
+  FirebaseAuth auth = FirebaseAuth.instance;
+
   @override
   Widget build(BuildContext context) {
     final auth = FirebaseAuth.instance;
@@ -28,18 +30,18 @@ class _MainScreenState extends State<MainScreen> {
             children: [
               SizedBox(height: mediaQuery.height * 0.05),
               CircleAvatar(
-                minRadius: 40,
-                backgroundColor: Colors.transparent,
-                child: Icon(
-                  Icons.account_circle,
-                  size: 90,
-                ),
-              ),
+                  minRadius: 40,
+                  backgroundColor: Colors.transparent,
+                  child: Image.network(
+                    auth.currentUser.photoURL,
+                    height: 90,
+                    width: 90,
+                  )),
               Padding(
                 padding: EdgeInsets.only(top: 15),
                 child: Center(
                   child: Text(
-                    'Nazwa użytkownika',
+                    auth.currentUser.displayName,
                     style: TextStyle(fontSize: 20),
                   ),
                 ),
@@ -59,6 +61,7 @@ class _MainScreenState extends State<MainScreen> {
                   setState(() {
                     darkmode = !darkmode;
                   });
+                  print(auth.currentUser);
                 },
                 child: ListTile(
                   leading: Icon(darkmode ? Ionicons.moon : Ionicons.sunny),
@@ -100,16 +103,7 @@ class _MainScreenState extends State<MainScreen> {
             Expanded(
               child: Container(
                 child: Center(
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ProfileScreen()),
-                      );
-                    },
-                    child: Text("Tu kiedys beda posty"),
-                  ),
+                  child: Text("Tu kiedys beda posty"),
                 ),
               ),
             ),
