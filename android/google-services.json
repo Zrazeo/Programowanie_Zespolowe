@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "639389172276",
+    "project_id": "forum-d9237",
+    "storage_bucket": "forum-d9237.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:639389172276:android:cf147e2fc8ff1127010061",
+        "android_client_info": {
+          "package_name": "com.example.zespolowe2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "639389172276-tu4mpgnsmko95uslo4ssga49l1tepek1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDvBCuD51RQ5XcXRUmy3XG9tcPEparZs20"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "639389172276-tu4mpgnsmko95uslo4ssga49l1tepek1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
