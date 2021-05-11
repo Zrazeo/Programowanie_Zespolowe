@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import './login_screen.dart';
+import './post_screen.dart';
 
 import 'package:ionicons/ionicons.dart';
 
@@ -108,17 +109,17 @@ class _MainScreenState extends State<MainScreen> {
                 ),
               ),
             ),
-            TextField(
-              decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: 'Udostepnij cos na forum'),
-            ),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => PostScreen()),
+          );
+        },
       ),
     );
   }
