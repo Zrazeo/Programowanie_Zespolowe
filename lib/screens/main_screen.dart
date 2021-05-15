@@ -1,9 +1,13 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import '../widgets/post.dart';
 import './login_screen.dart';
 import './post_screen.dart';
 
 import 'package:ionicons/ionicons.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class MainScreen extends StatefulWidget {
   @override
@@ -18,6 +22,8 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     final auth = FirebaseAuth.instance;
+    CollectionReference posts = FirebaseFirestore.instance.collection('posts');
+
     Size mediaQuery = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
@@ -98,19 +104,32 @@ class _MainScreenState extends State<MainScreen> {
           ),
         ),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Expanded(
-              child: Container(
-                child: Center(
-                  child: Text("Tu kiedys beda posty"),
-                ),
-              ),
+      body: StreamBuilder(
+        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (snapshot.hasError) {
+            return Text('ERROR');
+          }
+
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          }
+
+          return SingleChildScrollView(
+            child: Column(
+              children: snapshot.data.docs.map((DocumentSnapshot document) {
+                // print(document['zdj']);
+                // print(document['post']);
+
+                return Post(
+                  url: document['zdj'],
+                  tresc: document['post'],
+                  data: document['data'],
+                );
+              }).toList(),
             ),
-          ],
-        ),
+          );
+        },
+        stream: posts.snapshots(),
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
