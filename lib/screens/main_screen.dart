@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../widgets/post.dart';
 import './login_screen.dart';
 import './post_screen.dart';
+import 'dart:math' as math;
 
 import 'package:ionicons/ionicons.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -18,6 +19,7 @@ class _MainScreenState extends State<MainScreen> {
   bool darkmode = false;
 
   FirebaseAuth auth = FirebaseAuth.instance;
+  var sort = false;
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +31,21 @@ class _MainScreenState extends State<MainScreen> {
       appBar: AppBar(
         centerTitle: true,
         title: Text('Forum'),
+        actions: [
+          IconButton(
+            icon: Transform.rotate(
+              child: Icon(Icons.compare_arrows_sharp),
+              angle: math.pi / 2,
+            ),
+            onPressed: () {
+              setState(() {
+                sort = !sort;
+                print(sort);
+              });
+            },
+            tooltip: "Sortowanie",
+          )
+        ],
       ),
       drawer: Container(
         width: mediaQuery.width * 0.65,
@@ -129,7 +146,9 @@ class _MainScreenState extends State<MainScreen> {
             ),
           );
         },
-        stream: posts.snapshots(),
+        stream: sort
+            ? posts.orderBy('data', descending: false).snapshots()
+            : posts.orderBy('ocena', descending: true).snapshots(),
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
