@@ -1,11 +1,10 @@
-import 'dart:io';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../widgets/post.dart';
 import './login_screen.dart';
 import './post_screen.dart';
 import 'dart:math' as math;
+import './details_post_screen.dart';
 
 import 'package:ionicons/ionicons.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -138,16 +137,18 @@ class _MainScreenState extends State<MainScreen> {
                 // print(document['post']);
 
                 return Post(
+                  user: document['uzytkownik'],
                   url: document['zdj'],
                   tresc: document['post'],
                   data: document['data'],
+                  ocena: document['ocena'],
                 );
               }).toList(),
             ),
           );
         },
         stream: sort
-            ? posts.orderBy('data', descending: false).snapshots()
+            ? posts.orderBy('data', descending: true).snapshots()
             : posts.orderBy('ocena', descending: true).snapshots(),
       ),
       floatingActionButton: FloatingActionButton(
