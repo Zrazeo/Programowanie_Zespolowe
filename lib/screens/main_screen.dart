@@ -135,13 +135,15 @@ class _MainScreenState extends State<MainScreen> {
               children: snapshot.data.docs.map((DocumentSnapshot document) {
                 // print(document['zdj']);
                 // print(document['post']);
-
                 return Post(
+                  id: document.id,
                   user: document['uzytkownik'],
                   url: document['zdj'],
                   tresc: document['post'],
                   data: document['data'],
                   ocena: document['ocena'],
+                  like: document['like'],
+                  dislike: document['dislike'],
                 );
               }).toList(),
             ),
