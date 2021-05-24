@@ -134,7 +134,7 @@ class _MainScreenState extends State<MainScreen> {
             child: Column(
               children: snapshot.data.docs.map((DocumentSnapshot document) {
                 // print(document['zdj']);
-                // print(document['post']);
+                // print(document['komentarze']);
                 return Post(
                   id: document.id,
                   user: document['uzytkownik'],
@@ -144,6 +144,7 @@ class _MainScreenState extends State<MainScreen> {
                   ocena: document['ocena'],
                   like: document['like'],
                   dislike: document['dislike'],
+                  komentarze: document['komentarze'],
                 );
               }).toList(),
             ),

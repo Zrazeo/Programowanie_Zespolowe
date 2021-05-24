@@ -16,17 +16,20 @@ class Post extends StatefulWidget {
   int ocena;
   List<dynamic> like;
   List<dynamic> dislike;
+  List<dynamic> komentarze;
 
-  Post(
-      {this.id,
-      this.tresc,
-      this.url,
-      this.data,
-      this.urlUser,
-      this.user,
-      this.ocena,
-      this.like,
-      this.dislike});
+  Post({
+    this.id,
+    this.tresc,
+    this.url,
+    this.data,
+    this.urlUser,
+    this.user,
+    this.ocena,
+    this.like,
+    this.dislike,
+    this.komentarze,
+  });
 
   @override
   _PostState createState() => _PostState();
@@ -88,7 +91,7 @@ class _PostState extends State<Post> {
 
   @override
   Widget build(BuildContext context) {
-    // print(widget.id);
+    // print(widget.komentarze);
     var czas = widget.data.toDate();
     String formattedDate = DateFormat('yyyy-MM-dd – kk:mm').format(czas);
     return Padding(
@@ -130,11 +133,13 @@ class _PostState extends State<Post> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => DetailsPostScreen(
+                            id: widget.id,
                             data: widget.data,
                             ocena: widget.ocena,
                             tresc: widget.tresc,
                             url: widget.url,
                             user: widget.user,
+                            komentarze: widget.komentarze,
                           ),
                         ),
                       ),
