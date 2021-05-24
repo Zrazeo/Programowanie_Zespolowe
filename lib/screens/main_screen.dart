@@ -133,6 +133,7 @@ class _MainScreenState extends State<MainScreen> {
           return SingleChildScrollView(
             child: Column(
               children: snapshot.data.docs.map((DocumentSnapshot document) {
+                print(document['komentarze']);
                 // print(document['zdj']);
                 // print(document['komentarze']);
                 return Post(

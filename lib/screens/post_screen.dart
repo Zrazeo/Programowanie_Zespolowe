@@ -60,7 +60,7 @@ class _PostScreenState extends State<PostScreen> {
         'zdj': downloadURL,
         'post': post.text,
         'ocena': 0,
-        'komentarze': {},
+        'komentarze': [],
         'like': [],
         'dislike': [],
       });
