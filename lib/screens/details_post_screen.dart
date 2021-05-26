@@ -12,16 +12,19 @@ class DetailsPostScreen extends StatelessWidget {
   final String urlUser;
   List<dynamic> komentarze;
   int ocena;
+  final bool darkmode;
 
-  DetailsPostScreen(
-      {this.id,
-      this.tresc,
-      this.url,
-      this.data,
-      this.urlUser,
-      this.user,
-      this.ocena,
-      this.komentarze});
+  DetailsPostScreen({
+    this.id,
+    this.tresc,
+    this.url,
+    this.data,
+    this.urlUser,
+    this.user,
+    this.ocena,
+    this.komentarze,
+    this.darkmode,
+  });
 
   TextEditingController textCon = TextEditingController();
   void sendHelp() {
@@ -39,12 +42,23 @@ class DetailsPostScreen extends StatelessWidget {
     CollectionReference posts = FirebaseFirestore.instance.collection('posts');
 
     return Scaffold(
-      appBar: AppBar(),
+      backgroundColor: darkmode ? Colors.black87 : Colors.white,
+      appBar: AppBar(
+        iconTheme:
+            IconThemeData(color: darkmode ? Colors.black87 : Colors.white),
+      ),
       body: Container(
         height: MediaQuery.of(context).size.height * 0.85,
         child: ListView(
           children: [
-            Post(data: data, ocena: ocena, tresc: tresc, url: url, user: user),
+            Post(
+              data: data,
+              ocena: ocena,
+              tresc: tresc,
+              url: url,
+              user: user,
+              darkmode: darkmode,
+            ),
             Padding(
               padding: const EdgeInsets.all(5.0),
               child: Container(
@@ -63,11 +77,12 @@ class DetailsPostScreen extends StatelessWidget {
         ),
       ),
       bottomNavigationBar: Container(
-        color: Colors.white,
+        color: darkmode ? Colors.blueGrey : Colors.white,
         // height: MediaQuery.of(context).size.height * 0.01,
         child: Row(
           children: [
             Container(
+              color: darkmode ? Colors.blueGrey : Colors.white,
               width: MediaQuery.of(context).size.width * 0.87,
               child: TextField(
                 onSubmitted: (_) {

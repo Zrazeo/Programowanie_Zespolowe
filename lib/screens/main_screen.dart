@@ -4,7 +4,7 @@ import '../widgets/post.dart';
 import './login_screen.dart';
 import './post_screen.dart';
 import 'dart:math' as math;
-import './details_post_screen.dart';
+import './my_post.dart';
 
 import 'package:ionicons/ionicons.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -27,13 +27,20 @@ class _MainScreenState extends State<MainScreen> {
 
     Size mediaQuery = MediaQuery.of(context).size;
     return Scaffold(
+      backgroundColor: darkmode ? Colors.black87 : Colors.white,
       appBar: AppBar(
         centerTitle: true,
-        title: Text('Forum'),
+        title: Text(
+          'Forum',
+          style: TextStyle(color: darkmode ? Colors.black87 : Colors.white),
+        ),
+        iconTheme:
+            IconThemeData(color: darkmode ? Colors.black87 : Colors.white),
         actions: [
           IconButton(
             icon: Transform.rotate(
-              child: Icon(Icons.compare_arrows_sharp),
+              child: Icon(Icons.compare_arrows_sharp,
+                  color: darkmode ? Colors.black87 : Colors.white),
               angle: math.pi / 2,
             ),
             onPressed: () {
@@ -49,74 +56,96 @@ class _MainScreenState extends State<MainScreen> {
       drawer: Container(
         width: mediaQuery.width * 0.65,
         child: Drawer(
-          child: ListView(
-            children: [
-              SizedBox(height: mediaQuery.height * 0.05),
-              CircleAvatar(
-                minRadius: 70,
-                backgroundColor: Colors.transparent,
-                backgroundImage: NetworkImage(auth.currentUser.photoURL),
-                // child: Image.network(
-                //   auth.currentUser.photoURL,
-                //   height: 90,
-                //   width: 90,
-              ),
-              Padding(
-                padding: EdgeInsets.only(top: 15),
-                child: Center(
-                  child: Text(
-                    auth.currentUser.displayName,
-                    style: TextStyle(fontSize: 20),
-                  ),
+          child: Container(
+            color: darkmode ? Colors.black87 : Colors.white,
+            child: ListView(
+              children: [
+                SizedBox(height: mediaQuery.height * 0.05),
+                CircleAvatar(
+                  minRadius: 70,
+                  backgroundColor: Colors.transparent,
+                  backgroundImage: NetworkImage(auth.currentUser.photoURL),
+                  // child: Image.network(
+                  //   auth.currentUser.photoURL,
+                  //   height: 90,
+                  //   width: 90,
                 ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(top: 60),
-                child: ListTile(
-                  leading: Icon(Icons.message),
-                  title: Text(
-                    'Moje posty',
-                    style: TextStyle(fontSize: 16),
-                  ),
-                ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  setState(() {
-                    darkmode = !darkmode;
-                  });
-                  print(auth.currentUser);
-                },
-                child: ListTile(
-                  leading: Icon(darkmode ? Ionicons.moon : Ionicons.sunny),
-                  title: Text(
-                    darkmode ? 'Tryb ciemny' : 'Tryb jasny',
-                    style: TextStyle(fontSize: 16),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: mediaQuery.height * 0.37,
-              ),
-              GestureDetector(
-                onTap: () {
-                  auth.signOut();
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (BuildContext context) => LoginScreen(),
+                Padding(
+                  padding: EdgeInsets.only(top: 15),
+                  child: Center(
+                    child: Text(
+                      auth.currentUser.displayName,
+                      style: TextStyle(
+                          fontSize: 20,
+                          color: darkmode ? Colors.white : Colors.black),
                     ),
-                  );
-                },
-                child: ListTile(
-                  leading: Icon(Icons.logout),
-                  title: Text(
-                    'Wyloguj',
-                    style: TextStyle(fontSize: 16),
                   ),
                 ),
-              ),
-            ],
+                Padding(
+                  padding: EdgeInsets.only(top: 60),
+                  child: GestureDetector(
+                    onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (BuildContext context) => MyPost(darkmode),
+                      ),
+                    ),
+                    child: ListTile(
+                      leading: Icon(Icons.message,
+                          color: darkmode ? Colors.white : Colors.black87),
+                      title: Text(
+                        'Moje posty',
+                        style: TextStyle(
+                            fontSize: 16,
+                            color: darkmode ? Colors.white : Colors.black),
+                      ),
+                    ),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      darkmode = !darkmode;
+                    });
+                    print(auth.currentUser);
+                  },
+                  child: ListTile(
+                    leading: Icon(darkmode ? Ionicons.moon : Ionicons.sunny,
+                        color: darkmode ? Colors.white : Colors.black87),
+                    title: Text(
+                      darkmode ? 'Tryb ciemny' : 'Tryb jasny',
+                      style: TextStyle(
+                          fontSize: 16,
+                          color: darkmode ? Colors.white : Colors.black),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: mediaQuery.height * 0.37,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    auth.signOut();
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (BuildContext context) => LoginScreen(),
+                      ),
+                    );
+                  },
+                  child: ListTile(
+                    leading: Icon(Icons.logout,
+                        color: darkmode ? Colors.white : Colors.black87),
+                    title: Text(
+                      'Wyloguj',
+                      style: TextStyle(
+                          fontSize: 16,
+                          color: darkmode ? Colors.white : Colors.black),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -146,6 +175,7 @@ class _MainScreenState extends State<MainScreen> {
                   like: document['like'],
                   dislike: document['dislike'],
                   komentarze: document['komentarze'],
+                  darkmode: darkmode,
                 );
               }).toList(),
             ),
@@ -156,7 +186,7 @@ class _MainScreenState extends State<MainScreen> {
             : posts.orderBy('ocena', descending: true).snapshots(),
       ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
+        child: Icon(Icons.add, color: darkmode ? Colors.black87 : Colors.white),
         onPressed: () {
           Navigator.push(
             context,

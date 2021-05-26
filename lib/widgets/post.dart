@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import '../screens/details_post_screen.dart';
@@ -17,6 +16,7 @@ class Post extends StatefulWidget {
   List<dynamic> like;
   List<dynamic> dislike;
   List<dynamic> komentarze;
+  bool darkmode;
 
   Post({
     this.id,
@@ -29,6 +29,7 @@ class Post extends StatefulWidget {
     this.like,
     this.dislike,
     this.komentarze,
+    this.darkmode,
   });
 
   @override
@@ -98,14 +99,21 @@ class _PostState extends State<Post> {
       padding: const EdgeInsets.all(1.0),
       child: Center(
         child: Card(
+          color: widget.darkmode ? Colors.blueGrey[900] : Colors.white,
           // elevation: 20,
           child: Column(
             children: [
               ListTile(
                 title: Text(
                   widget.user,
+                  style: TextStyle(
+                      color: widget.darkmode ? Colors.white : Colors.black87),
                 ),
-                subtitle: Text(formattedDate),
+                subtitle: Text(
+                  formattedDate,
+                  style: TextStyle(
+                      color: widget.darkmode ? Colors.white70 : Colors.black87),
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.all(5.0),
@@ -116,7 +124,9 @@ class _PostState extends State<Post> {
                 title: Text(
                   widget.tresc,
                   textAlign: TextAlign.left,
-                  style: TextStyle(fontSize: 15),
+                  style: TextStyle(
+                      fontSize: 15,
+                      color: widget.darkmode ? Colors.white : Colors.black87),
                 ),
               ),
               Padding(
@@ -140,6 +150,7 @@ class _PostState extends State<Post> {
                             url: widget.url,
                             user: widget.user,
                             komentarze: widget.komentarze,
+                            darkmode: widget.darkmode,
                           ),
                         ),
                       ),
