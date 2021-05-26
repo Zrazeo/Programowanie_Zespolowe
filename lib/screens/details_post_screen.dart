@@ -39,7 +39,6 @@ class DetailsPostScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // print(komentarze[0]);
-    CollectionReference posts = FirebaseFirestore.instance.collection('posts');
 
     return Scaffold(
       backgroundColor: darkmode ? Colors.black87 : Colors.white,
@@ -59,16 +58,19 @@ class DetailsPostScreen extends StatelessWidget {
               user: user,
               darkmode: darkmode,
             ),
-            Padding(
-              padding: const EdgeInsets.all(5.0),
-              child: Container(
-                height: 246,
-                child: Card(
-                  elevation: 20,
-                  child: ListView.builder(
-                    itemCount: komentarze.length,
-                    itemBuilder: (context, index) =>
-                        Komentarz(komentarze, index),
+            Container(
+              child: Padding(
+                padding: const EdgeInsets.all(5.0),
+                child: Container(
+                  height: 246,
+                  child: Card(
+                    color: darkmode ? Colors.blueGrey[900] : Colors.white,
+                    elevation: 20,
+                    child: ListView.builder(
+                      itemCount: komentarze.length,
+                      itemBuilder: (context, index) =>
+                          Komentarz(komentarze, index, darkmode),
+                    ),
                   ),
                 ),
               ),
@@ -93,6 +95,8 @@ class DetailsPostScreen extends StatelessWidget {
                 controller: textCon,
                 decoration: InputDecoration(
                   hintText: "Skomentuj",
+                  hintStyle:
+                      TextStyle(color: darkmode ? Colors.white : Colors.black),
                   border: OutlineInputBorder(
                     borderSide: BorderSide(width: 2),
                   ),
