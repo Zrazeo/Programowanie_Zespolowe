@@ -24,8 +24,8 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     final auth = FirebaseAuth.instance;
     CollectionReference posts = FirebaseFirestore.instance.collection('posts');
-
     Size mediaQuery = MediaQuery.of(context).size;
+
     return Scaffold(
       backgroundColor: darkmode ? Colors.black87 : Colors.white,
       appBar: AppBar(
@@ -113,7 +113,7 @@ class _MainScreenState extends State<MainScreen> {
                     leading: Icon(darkmode ? Ionicons.moon : Ionicons.sunny,
                         color: darkmode ? Colors.white : Colors.black87),
                     title: Text(
-                      darkmode ? 'Tryb ciemny' : 'Tryb jasny',
+                      darkmode ? 'Tryb jasny' : 'Tryb ciemny',
                       style: TextStyle(
                           fontSize: 16,
                           color: darkmode ? Colors.white : Colors.black),
@@ -162,7 +162,7 @@ class _MainScreenState extends State<MainScreen> {
           return SingleChildScrollView(
             child: Column(
               children: snapshot.data.docs.map((DocumentSnapshot document) {
-                print(document['komentarze']);
+                print("REFREESH");
                 // print(document['zdj']);
                 // print(document['komentarze']);
                 return Post(

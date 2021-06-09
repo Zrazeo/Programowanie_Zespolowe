@@ -13,12 +13,24 @@ class PostScreen extends StatefulWidget {
 }
 
 class _PostScreenState extends State<PostScreen> {
+  @override
+  void initState() {
+    super.initState();
+    TextEditingController post = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    post.dispose();
+    super.dispose();
+  }
+
   File _image;
   final picker = ImagePicker();
   String downloadURL;
-  TextEditingController post = TextEditingController();
-
+  TextEditingController post;
   final auth = FirebaseAuth.instance;
+
   Future getImage() async {
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
 

@@ -40,7 +40,7 @@ FirebaseAuth auth = FirebaseAuth.instance;
 CollectionReference posts = FirebaseFirestore.instance.collection('posts');
 
 class _PostState extends State<Post> {
-  Future<void> updateOcenyLike(int zmienna) {
+  Future<void> updateOcenyLike(int zmienna) async {
     switch (zmienna) {
       case 1: // Nic --> lubisz
         widget.like.add(auth.currentUser.email);
@@ -48,46 +48,36 @@ class _PostState extends State<Post> {
       case 2: // Nie lubisz --> lubisz
         widget.dislike.removeWhere((email) => email == auth.currentUser.email);
         widget.like.add(auth.currentUser.email);
-        posts.doc(widget.id).update({'like': widget.dislike});
 
+        await posts.doc(widget.id).update({'dislike': widget.dislike});
         break;
       case -1: // lubisz na nic
         widget.like.removeWhere((email) => email == auth.currentUser.email);
+        break;
+    }
+    await posts.doc(widget.id).update({'like': widget.like});
+    await posts.doc(widget.id).update({'ocena': widget.ocena + zmienna});
+  }
+
+  Future<void> updateOcenyDislike(int zmienna) async {
+    switch (zmienna) {
+      case -1: // Nic --> nie lubisz
+        widget.dislike.add(auth.currentUser.email);
+
+        break;
+      case 1: // nie lubisz na nic
+        widget.dislike.removeWhere((email) => email == auth.currentUser.email);
 
         break;
       case -2: // lubisz na nie lubisz
         widget.like.removeWhere((email) => email == auth.currentUser.email);
         widget.dislike.add(auth.currentUser.email);
-
-        posts.doc(widget.id).update({'like': widget.dislike});
+        print("KURWA ${widget.dislike}");
+        await posts.doc(widget.id).update({'like': widget.like});
+        break;
     }
-    posts.doc(widget.id).update({'like': widget.like});
-    return posts.doc(widget.id).update({"ocena": widget.ocena + zmienna});
-  }
-
-  Future<void> updateOcenyDislike(int zmienna) {
-    switch (zmienna) {
-      case 1: // Nic --> nie lubisz
-        widget.dislike.add(auth.currentUser.email);
-
-        break;
-      case 2: // lubisz --> nie lubisz
-        widget.like.removeWhere((email) => email == auth.currentUser.email);
-        widget.dislike.add(auth.currentUser.email);
-
-        posts.doc(widget.id).update({'like': widget.like});
-        break;
-      case -1: // nie lubisz na nic
-        widget.dislike.removeWhere((email) => email == auth.currentUser.email);
-
-        break;
-      case -2: // nie lubisz na lubisz
-        widget.dislike.removeWhere((email) => email == auth.currentUser.email);
-        widget.like.add(auth.currentUser.email);
-        posts.doc(widget.id).update({'like': widget.like});
-    }
-    posts.doc(widget.id).update({'dislike': widget.dislike});
-    return posts.doc(widget.id).update({"ocena": widget.ocena - zmienna});
+    await posts.doc(widget.id).update({'dislike': widget.dislike});
+    await posts.doc(widget.id).update({'ocena': widget.ocena + zmienna});
   }
 
   @override
@@ -151,61 +141,59 @@ class _PostState extends State<Post> {
                             user: widget.user,
                             komentarze: widget.komentarze,
                             darkmode: widget.darkmode,
+                            like: widget.like,
+                            dislike: widget.dislike,
+                            upvote: updateOcenyLike,
+                            downvote: updateOcenyDislike,
                           ),
                         ),
                       ),
                     ),
                     IconButton(
-                        icon: Icon(Icons.remove),
-                        onPressed: () {
-                          setState(() {
-                            int zmienna;
-                            if (widget.dislike
-                                .contains(auth.currentUser.email)) {
-                              zmienna = -1; // z nie lubisz na nic
-                            } else if (widget.like
-                                .contains(auth.currentUser.email)) {
-                              zmienna = 2; // z nie lubisz na lubisz
-                            } else if ((widget.like
-                                        .contains(auth.currentUser.email)) ==
-                                    false &&
-                                (widget.dislike
-                                        .contains(auth.currentUser.email)) ==
-                                    false) {
-                              zmienna = 1; // z nic na lubisz
-                            } else {
-                              zmienna = -2;
-                            }
-                            updateOcenyDislike(zmienna);
-
-                            // widget.ocena -= 1;
-                          });
-                        }),
+                      icon: Icon(Icons.remove),
+                      onPressed: () async {
+                        int zmienna;
+                        if (widget.dislike.contains(auth.currentUser.email)) {
+                          zmienna = 1; // z nie lubisz na nic
+                        } else if (widget.like
+                            .contains(auth.currentUser.email)) {
+                          zmienna = -2; // z lubisz na nie lubisz
+                        } else if ((widget.like
+                                    .contains(auth.currentUser.email)) ==
+                                false &&
+                            (widget.dislike.contains(auth.currentUser.email)) ==
+                                false) {
+                          zmienna = -1; // z nic na lubisz
+                        }
+                        await updateOcenyDislike(zmienna);
+                        // print("Like ${widget.like}");
+                        // print("Disike ${widget.dislike}");
+                        // widget.ocena -= 1;
+                      },
+                    ),
                     IconButton(
                         icon: Icon(Icons.add),
-                        onPressed: () {
-                          setState(() {
-                            // print(widget.id);
-                            int zmienna;
-                            if (widget.like.contains(auth.currentUser.email)) {
-                              zmienna = -1; // z lubisz na nic
-                            } else if (widget.dislike
-                                .contains(auth.currentUser.email)) {
-                              zmienna = 2; // z nie lubisz na lubisz
-                            } else if ((widget.like
-                                        .contains(auth.currentUser.email)) ==
-                                    false &&
-                                (widget.dislike
-                                        .contains(auth.currentUser.email)) ==
-                                    false) {
-                              zmienna = 1; // z nic na lubisz
-                            } else {
-                              zmienna = -2;
-                            }
-                            updateOcenyLike(zmienna);
+                        onPressed: () async {
+                          // print(widget.id);
+                          int zmienna;
+                          if (widget.like.contains(auth.currentUser.email)) {
+                            zmienna = -1; // z lubisz na nic
+                          } else if (widget.dislike
+                              .contains(auth.currentUser.email)) {
+                            zmienna = 2; // z nie lubisz na lubisz
+                          } else if ((widget.like
+                                      .contains(auth.currentUser.email)) ==
+                                  false &&
+                              (widget.dislike
+                                      .contains(auth.currentUser.email)) ==
+                                  false) {
+                            zmienna = 1; // z nic na lubisz
+                          }
+                          await updateOcenyLike(zmienna);
+                          print("Like ${widget.like}");
+                          print("Disike ${widget.dislike}");
 
-                            // widget.ocena++;
-                          });
+                          // widget.ocena++;
                         }),
                     Text(widget.ocena.toString()),
                   ],
