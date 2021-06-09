@@ -64,7 +64,7 @@ class _DetailsPostScreenState extends State<DetailsPostScreen> {
       ),
       body: Container(
         color: widget.darkmode ? Colors.blueGrey[900] : Colors.white,
-        height: MediaQuery.of(context).size.height * 0.85,
+        height: MediaQuery.of(context).size.height * 0.95,
         child: Card(
           color: widget.darkmode ? Colors.blueGrey[900] : Colors.white,
           child: SingleChildScrollView(
